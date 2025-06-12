@@ -1,0 +1,12 @@
+version: 0.0.1
+kind: DataContract
+apiVersion: v3.0.1
+id: my-data-contract-id
+name: My Data Contract
+status: draft
+schema:
+- name: FootballSchema
+  physicalType: object
+  description: Schema for football team and person details
+  logicalType: object
+  physicalName: FootballSchema
