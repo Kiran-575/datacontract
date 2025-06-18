@@ -1,6 +1,7 @@
 import os
 from importlib import metadata
 from pathlib import Path
+from openpyxl import Workbook
 from typing import Iterable, List, Optional
 
 import typer
@@ -224,14 +225,26 @@ def export(
         engine=engine,
         template=template,
     )
+    #Don't interpret console markup in output.
+    #if output is None:
+    #    console.print(result, markup=False, soft_wrap=True)
+    #else:
+    #    with output.open(mode="w", encoding="utf-8") as f:
+     #       f.write(result)
+     #   console.print(f"Written result to {output}")
+     
+    
     # Don't interpret console markup in output.
     if output is None:
         console.print(result, markup=False, soft_wrap=True)
     else:
-        with output.open(mode="w", encoding="utf-8") as f:
-            f.write(result)
-        console.print(f"Written result to {output}")
-
+        if isinstance(result, Workbook):
+            result.save(str(output))  # Save Excel files properly
+            console.print(f"Written Excel workbook to {output}")
+        else:
+            with output.open(mode="w", encoding="utf-8") as f:
+                f.write(result)
+            console.print(f"Written result to {output}")
 
 @app.command(name="import")
 def import_(
@@ -297,6 +310,14 @@ def import_(
         str,
         typer.Option(help="The location (url or path) of the Data Contract Specification JSON Schema"),
     ] = None,
+    owner: Annotated[
+        Optional[str],
+        typer.Option(help="The owner or team responsible for managing the data contract."),
+    ] = None,
+    id: Annotated[
+        Optional[str],
+        typer.Option(help="The identifier for the the data contract."),
+    ] = None,
 ):
     """
     Create a data contract from the given source location. Saves to file specified by `output` option if present, otherwise prints to stdout.
@@ -316,6 +337,8 @@ def import_(
         dbml_schema=dbml_schema,
         dbml_table=dbml_table,
         iceberg_table=iceberg_table,
+        owner=owner,
+        id=id,
     )
     if output is None:
         console.print(result.to_yaml(), markup=False, soft_wrap=True)

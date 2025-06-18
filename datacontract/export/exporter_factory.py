@@ -92,6 +92,12 @@ exporter_factory.register_lazy_exporter(
 )
 
 exporter_factory.register_lazy_exporter(
+    name=ExportFormat.mermaid,
+    module_path="datacontract.export.mermaid_exporter",
+    class_name="MermaidExporter",
+)
+
+exporter_factory.register_lazy_exporter(
     name=ExportFormat.dbt_sources,
     module_path="datacontract.export.dbt_converter",
     class_name="DbtSourceExporter",
@@ -135,7 +141,7 @@ exporter_factory.register_lazy_exporter(
 
 exporter_factory.register_lazy_exporter(
     name=ExportFormat.html,
-    module_path="datacontract.export.html_export",
+    module_path="datacontract.export.html_exporter",
     class_name="HtmlExporter",
 )
 
