@@ -328,3 +328,4 @@ fabric.properties
 
 # Generated test files
 **/.tmp
+datacontract-cli/
